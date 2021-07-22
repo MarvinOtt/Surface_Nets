@@ -22,7 +22,7 @@ namespace Surface_Nets
         public bool IsDisposed = false;
         public bool IsDrawable, IsGenerated;
 
-	    public int vertexlength;
+        public int vertexlength;
         public Game1.VertexPositionColorNormal_noTexCoo[] vertexes;
         //public List<Game1.VertexPositionColorNormal_noTexCoo> vertexes = new List<Game1.VertexPositionColorNormal_noTexCoo>();
         //public List<short3> vertexes_ID = new List<short3>();
@@ -37,7 +37,7 @@ namespace Surface_Nets
             IsDrawable = false;
             this.baseworld = baseworld;
             chunkpos = CHpos;
-			/*if(IsVertex == null)
+            /*if(IsVertex == null)
 				IsVertex = new byte[size + 3, size + 3, size + 3];
 			if(VertexPos == null)
 				VertexPos = new Vector3[size + 3, size + 3, size + 3];
@@ -51,14 +51,14 @@ namespace Surface_Nets
             uint uz = (uint)z;
 
             short value_xyz = DATA[ux, uy, uz];
-	        short value_xYz = DATA[ux, uy + 1, uz];
-	        short value_Xyz = DATA[ux + 1, uy, uz];
-	        short value_XYz = DATA[ux + 1, uy + 1, uz];
+            short value_xYz = DATA[ux, uy + 1, uz];
+            short value_Xyz = DATA[ux + 1, uy, uz];
+            short value_XYz = DATA[ux + 1, uy + 1, uz];
 
-	        short value_xyZ = DATA[ux, uy, uz + 1];
-	        short value_xYZ = DATA[ux, uy + 1, uz + 1];
-	        short value_XyZ = DATA[ux + 1, uy, uz + 1];
-	        short value_XYZ = DATA[ux + 1, uy + 1, uz + 1];
+            short value_xyZ = DATA[ux, uy, uz + 1];
+            short value_xYZ = DATA[ux, uy + 1, uz + 1];
+            short value_XyZ = DATA[ux + 1, uy, uz + 1];
+            short value_XYZ = DATA[ux + 1, uy + 1, uz + 1];
 
             float xratio = x - (float)ux;
             float yratio = y - (float)uy;
@@ -69,13 +69,13 @@ namespace Surface_Nets
             OUT1 += value_xYz * (1 - xratio) * (yratio);
             OUT1 += value_Xyz * (xratio) * (1 - yratio);
             OUT1 += value_XYz * (xratio) * (yratio);
-	        OUT1 *= (1 - zratio);
+            OUT1 *= (1 - zratio);
 
             OUT2 += value_xyZ * (1 - xratio) * (1 - yratio);
             OUT2 += value_xYZ * (1 - xratio) * (yratio);
             OUT2 += value_XyZ * (xratio) * (1 - yratio);
             OUT2 += value_XYZ * (xratio) * (yratio);
-	        OUT2 *= zratio;
+            OUT2 *= zratio;
 
             return (OUT1 + OUT2) * 0.125f;
         }
@@ -100,9 +100,9 @@ namespace Surface_Nets
                 direction += new Vector3(-1, 1, -1);
             if ((state & (1 << 7)) > 0)
                 direction += new Vector3(-1, -1, -1);
-			
+
             direction = Vector3.Normalize(direction);
-	        Vector3 currentpos = Vector3.Zero;
+            Vector3 currentpos = Vector3.Zero;
             const float strength = 1.0f;
             float value1 = getvalueatpos(x - 0.5f - direction.X * strength, y - 0.5f - direction.Y * strength, z - 0.5f - direction.Z * strength);
             Vector3 pos1 = new Vector3(x - 0.5f - direction.X * strength, y - 0.5f - direction.Y * strength, z - 0.5f - direction.Z * strength);
@@ -111,9 +111,9 @@ namespace Surface_Nets
             {
                 currentpos = (pos1 + pos2) * 0.5f;
                 float currentvalue = getvalueatpos(currentpos.X, currentpos.Y, currentpos.Z);
-	            float dif1 = currentvalue - value1;
-	            if (currentvalue < 0)
-		            dif1 = -dif1;
+                float dif1 = currentvalue - value1;
+                if (currentvalue < 0)
+                    dif1 = -dif1;
                 if (dif1 > 0)
                     pos2 = currentpos;
                 else
@@ -123,7 +123,7 @@ namespace Surface_Nets
                 }
 
             }
-			
+
             VertexPos[x - 2, y - 2, z - 2] = currentpos;
         }
 
@@ -273,33 +273,33 @@ namespace Surface_Nets
 
         }*/
 
-	    [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-	    public static extern IntPtr Generate_Chunk(IntPtr vertexpos, IntPtr DATA, byte[,,] IsVertex, ref int returnlength);
-	    [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr Generate_Chunk(IntPtr vertexpos, IntPtr DATA, byte[,,] IsVertex, ref int returnlength);
+        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Generate_Vertexes(IntPtr vertexes, IntPtr states, short[,,] DATA, IntPtr vertexpos);
-	    [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-	    public static extern void FreeChunkGenerationMemory(IntPtr states);
+        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FreeChunkGenerationMemory(IntPtr states);
 
         public unsafe void Generate2(int threadindex, bool ForceUpload)
         {
-	        DATA = baseworld.DATA_global[threadindex];
-			
-	        IsVertex = baseworld.IsVertex_global[threadindex];
-	        VertexPos = baseworld.VertexPos_global[threadindex];
-	        bool SkipGenerateVertexes = false;
+            DATA = baseworld.DATA_global[threadindex];
+
+            IsVertex = baseworld.IsVertex_global[threadindex];
+            VertexPos = baseworld.VertexPos_global[threadindex];
+            bool SkipGenerateVertexes = false;
 
             float gettingdatatime, smoothingtime, meshtime;
             Stopwatch watch = new Stopwatch();
-	        //short[,,] DATA2 = new short[size + 6, size + 6, size + 6];
-	        //DATA = DATA2;
+            //short[,,] DATA2 = new short[size + 6, size + 6, size + 6];
+            //DATA = DATA2;
 
             int topy = 0, bottomy = 0, rightx = 0, leftx = 0, frontz = 0, backz = 0;
             int yfac = 0, xfac = 0, zfac = 0;
-	        short[,,] referencedata = baseworld.Dchunks[worldarraypos.X, worldarraypos.Y, worldarraypos.Z].DATA;
+            short[,,] referencedata = baseworld.Dchunks[worldarraypos.X, worldarraypos.Y, worldarraypos.Z].DATA;
 
-	        bool reference = DATA[0, 0, 0] <= 0;
-	        int counter = 0;
-			watch.Start();
+            bool reference = DATA[0, 0, 0] <= 0;
+            int counter = 0;
+            watch.Start();
             for (int x = -1; x < 2; ++x)
             {
                 for (int z = -1; z < 2; ++z)
@@ -307,10 +307,10 @@ namespace Surface_Nets
                     for (int y = -1; y < 2; ++y)
                     {
                         //if(baseworld.worldDATA[worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z].DATA == null && baseworld.worldDATA[worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z].IsEmpty == 0)
-	                        //baseworld.GenerateNewData(worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z);
-	                    DataChunk currentdatachunk = baseworld.Dchunks[worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z];
-	                    if (currentdatachunk.IsEmpty == 0 && currentdatachunk.DATA == null)
-		                    continue;
+                        //baseworld.GenerateNewData(worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z);
+                        DataChunk currentdatachunk = baseworld.Dchunks[worldarraypos.X + x, worldarraypos.Y + y, worldarraypos.Z + z];
+                        if (currentdatachunk.IsEmpty == 0 && currentdatachunk.DATA == null)
+                            continue;
 
                         if (y == -1) { topy = Game1.CHUNK_SIZE; bottomy = Game1.CHUNK_SIZE - 3; }
                         else if (y == 0) { topy = Game1.CHUNK_SIZE; bottomy = 0; }
@@ -338,28 +338,28 @@ namespace Surface_Nets
                         else if (z == 0) { zfac = 3; }
                         else { zfac = Game1.CHUNK_SIZE + 3; }
 
-	                    short[,,] currentdata = currentdatachunk.DATA;
+                        short[,,] currentdata = currentdatachunk.DATA;
                         for (int x2 = leftx + xfac; x2 < rightx + xfac; ++x2)
                         {
                             for (int z2 = frontz + zfac; z2 < backz + zfac; ++z2)
                             {
-	                            if (currentdatachunk.IsEmpty == 0)
-	                            {
-		                            for (int y2 = bottomy + yfac; y2 < topy + yfac; ++y2)
-		                            {
-			                            short val = currentdata[x2 - xfac, y2 - yfac, z2 - zfac];
+                                if (currentdatachunk.IsEmpty == 0)
+                                {
+                                    for (int y2 = bottomy + yfac; y2 < topy + yfac; ++y2)
+                                    {
+                                        short val = currentdata[x2 - xfac, y2 - yfac, z2 - zfac];
                                         DATA[x2, y2, z2] = val;
-			                            if (reference == (val <= 0))
-				                            counter++;
-		                            }
-	                            }
-	                            else
-	                            {
-		                            for (int y2 = bottomy + yfac; y2 < topy + yfac; ++y2)
-		                            {
-			                            DATA[x2, y2, z2] = currentdatachunk.IsEmpty;
-			                            if (reference == (currentdatachunk.IsEmpty <= 0))
-				                            counter++;
+                                        if (reference == (val <= 0))
+                                            counter++;
+                                    }
+                                }
+                                else
+                                {
+                                    for (int y2 = bottomy + yfac; y2 < topy + yfac; ++y2)
+                                    {
+                                        DATA[x2, y2, z2] = currentdatachunk.IsEmpty;
+                                        if (reference == (currentdatachunk.IsEmpty <= 0))
+                                            counter++;
                                     }
                                 }
                             }
@@ -368,49 +368,49 @@ namespace Surface_Nets
                 }
             }
 
-	        if (counter == 0 || counter == (Game1.CHUNK_SIZE + 6) * (Game1.CHUNK_SIZE + 6) * (Game1.CHUNK_SIZE + 6))
-		        SkipGenerateVertexes = true;
-			watch.Stop();
-	        gettingdatatime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
-	        watch.Restart();
-	        fixed (Vector3* p = VertexPos)
-	        {
-		        int arraylength = 0;
-		        IntPtr statepointer = IntPtr.Zero;
-		        if (!SkipGenerateVertexes)
-		        {
-			        fixed (short* dat = DATA)
-			        {
-				        statepointer = Generate_Chunk((IntPtr) p, (IntPtr) dat, IsVertex, ref arraylength);
-			        }
-		        }
+            if (counter == 0 || counter == (Game1.CHUNK_SIZE + 6) * (Game1.CHUNK_SIZE + 6) * (Game1.CHUNK_SIZE + 6))
+                SkipGenerateVertexes = true;
+            watch.Stop();
+            gettingdatatime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
+            watch.Restart();
+            fixed (Vector3* p = VertexPos)
+            {
+                int arraylength = 0;
+                IntPtr statepointer = IntPtr.Zero;
+                if (!SkipGenerateVertexes)
+                {
+                    fixed (short* dat = DATA)
+                    {
+                        statepointer = Generate_Chunk((IntPtr)p, (IntPtr)dat, IsVertex, ref arraylength);
+                    }
+                }
 
-		        //vertexes = new Game1.VertexPositionColorNormal_noTexCoo[arraylength];
-				if(arraylength > 0)
-		        {
-			        bool Has2GeneratenewData = false;
-			        lock (baseworld.unused_vertexData)
-			        {
-				        if (baseworld.unused_vertexData_length > 0)
-					        vertexes = baseworld.unused_vertexData[--baseworld.unused_vertexData_length];
-				        else
-					        Has2GeneratenewData = true;
-			        }
-					if(Has2GeneratenewData)
-						vertexes = new Game1.VertexPositionColorNormal_noTexCoo[75000];
-			        fixed (Game1.VertexPositionColorNormal_noTexCoo* v = vertexes)
-			        {
-				        Generate_Vertexes((IntPtr) v, statepointer, DATA, (IntPtr) p);
-			        }
-		        }
-				if(statepointer != IntPtr.Zero)
-					FreeChunkGenerationMemory(statepointer);
-		        vertexlength = arraylength;
-	        }
+                //vertexes = new Game1.VertexPositionColorNormal_noTexCoo[arraylength];
+                if (arraylength > 0)
+                {
+                    bool Has2GeneratenewData = false;
+                    lock (baseworld.unused_vertexData)
+                    {
+                        if (baseworld.unused_vertexData_length > 0)
+                            vertexes = baseworld.unused_vertexData[--baseworld.unused_vertexData_length];
+                        else
+                            Has2GeneratenewData = true;
+                    }
+                    if (Has2GeneratenewData)
+                        vertexes = new Game1.VertexPositionColorNormal_noTexCoo[75000];
+                    fixed (Game1.VertexPositionColorNormal_noTexCoo* v = vertexes)
+                    {
+                        Generate_Vertexes((IntPtr)v, statepointer, DATA, (IntPtr)p);
+                    }
+                }
+                if (statepointer != IntPtr.Zero)
+                    FreeChunkGenerationMemory(statepointer);
+                vertexlength = arraylength;
+            }
 
             //watch.Start();
             // Getting Surface Vertexes
-	        /*Parallel.For(2, size + 5, x =>
+            /*Parallel.For(2, size + 5, x =>
 		        //for (int x = 2; x < size + 5; ++x)
 	        {
 		        for (int z = 2; z < size + 5; ++z)
@@ -439,14 +439,14 @@ namespace Surface_Nets
 			        }
 		        }
 	        });*/
-	        watch.Stop();
-	        smoothingtime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
-	        watch.Restart();
+            watch.Stop();
+            smoothingtime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
+            watch.Restart();
 
             //AddMesh(3, 3, 3, size + 3, size + 3, size + 3);
 
-	        watch.Stop();
-	        meshtime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
+            watch.Stop();
+            meshtime = (watch.ElapsedTicks / (float)(Stopwatch.Frequency / 1000.0f));
             //watch.Restart();
 
             //VertexPos = null;
@@ -457,10 +457,10 @@ namespace Surface_Nets
             Console.WriteLine("GEN_TIME: " + (gettingdatatime + smoothingtime + meshtime) + " (" + gettingdatatime + ", " + smoothingtime + ", " + meshtime + ")");
 #endif
             Game1.finaltime += (smoothingtime + gettingdatatime + meshtime);
-	        IsDrawable = false;
-			if(ForceUpload)
-				UploadVertexBuffer2GPU();
-	        IsGenerated = true;
+            IsDrawable = false;
+            if (ForceUpload)
+                UploadVertexBuffer2GPU();
+            IsGenerated = true;
         }
 
         // This function should be called in the main thread for extra performance
@@ -470,19 +470,19 @@ namespace Surface_Nets
             {
                 Stopwatch watch = new Stopwatch();
                 watch.Restart();
-				if(vertexbuffer != null && vertexbuffer.IsDisposed == false)
-					vertexbuffer.Dispose();
+                if (vertexbuffer != null && vertexbuffer.IsDisposed == false)
+                    vertexbuffer.Dispose();
                 vertexbuffer = new VertexBuffer(graphicsdevice, Game1.VertexPositionColorNormal_noTexCoo.VertexDeclaration, vertexlength, BufferUsage.WriteOnly);
                 vertexbuffer.SetData(vertexes, 0, vertexlength);
-				
-                IsDrawable = true;
-	            lock (baseworld.unused_vertexData)
-	            {
-		            if (baseworld.unused_vertexData_length < baseworld.unused_vertexData.Length && vertexes != null)
-			            baseworld.unused_vertexData[baseworld.unused_vertexData_length++] = vertexes;
-	            }
 
-	            vertexes = null;
+                IsDrawable = true;
+                lock (baseworld.unused_vertexData)
+                {
+                    if (baseworld.unused_vertexData_length < baseworld.unused_vertexData.Length && vertexes != null)
+                        baseworld.unused_vertexData[baseworld.unused_vertexData_length++] = vertexes;
+                }
+
+                vertexes = null;
                 watch.Stop();
                 //Console.WriteLine("Uploading Vertex Data: " + (watch.ElapsedTicks / (float)TimeSpan.TicksPerMillisecond));
 
@@ -515,27 +515,27 @@ namespace Surface_Nets
 
             if (disposing)
             {
-	            //vertexes = null;
+                //vertexes = null;
                 //vertexes_ID?.Clear();
-	            if (vertexes != null)
-	            {
-		            lock (baseworld.unused_vertexData)
-		            {
-			            if (baseworld.unused_vertexData_length < baseworld.unused_vertexData.Length)
-				            baseworld.unused_vertexData[baseworld.unused_vertexData_length++] = vertexes;
-		            }
+                if (vertexes != null)
+                {
+                    lock (baseworld.unused_vertexData)
+                    {
+                        if (baseworld.unused_vertexData_length < baseworld.unused_vertexData.Length)
+                            baseworld.unused_vertexData[baseworld.unused_vertexData_length++] = vertexes;
+                    }
                 }
 
-	            vertexes = null;
+                vertexes = null;
                 IsVertex = null;
                 VertexPos = null;
                 DATA = null;
-				//GC.SuppressFinalize(this);
+                //GC.SuppressFinalize(this);
                 // Free any other managed objects here.
             }
 
             vertexbuffer?.Dispose();
-	        vertexbuffer = null;
+            vertexbuffer = null;
             IsDrawable = false;
             IsGenerated = false;
             // Free any unmanaged objects here.

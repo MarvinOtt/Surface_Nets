@@ -9,48 +9,48 @@ namespace Surface_Nets
 {
     public class SimplexNoise
     {
-	    // CONSTS
-	    const float G3 = 1.0f / 6.0f;
-	    const float G3_2 = 2.0f / 6.0f;
-	    const float G3_3min1 = 3.0f / 6.0f - 1.0f;
-	    const float F3 = 1.0f / 3.0f;
+        // CONSTS
+        const float G3 = 1.0f / 6.0f;
+        const float G3_2 = 2.0f / 6.0f;
+        const float G3_3min1 = 3.0f / 6.0f - 1.0f;
+        const float F3 = 1.0f / 3.0f;
 
         private uint[] p;
-	    private static int[][] grad3 = {
-		    new int[] {1,1,0}, new int[] {-1,1,0}, new int[] {1,-1,0}, new int[] {-1,-1,0}, new int[] {1,0,1}, new int[] {-1,0,1}, new int[] {1,0,-1}, new int[] {-1,0,-1}, new int[] {0,1,1}, new int[] {0,-1,1}, new int[] {0,1,-1}, new int[] {0,-1,-1}
-	    };
+        private static int[][] grad3 = {
+            new int[] {1,1,0}, new int[] {-1,1,0}, new int[] {1,-1,0}, new int[] {-1,-1,0}, new int[] {1,0,1}, new int[] {-1,0,1}, new int[] {1,0,-1}, new int[] {-1,0,-1}, new int[] {0,1,1}, new int[] {0,-1,1}, new int[] {0,1,-1}, new int[] {0,-1,-1}
+        };
 
         public SimplexNoise(int seed)
-	    {
+        {
             Random r = new Random(seed);
-			uint[] p2 = new uint[256];
-		    for (int x = 0; x < 256; ++x)
-		    {
-			    p2[x] = (uint)r.Next(0, 256);
-		    }
+            uint[] p2 = new uint[256];
+            for (int x = 0; x < 256; ++x)
+            {
+                p2[x] = (uint)r.Next(0, 256);
+            }
             p = new uint[512];
-		    for (int x = 0; x < 512; ++x)
-		    {
-			    p[x] = p2[x % 256];
-		    }
+            for (int x = 0; x < 512; ++x)
+            {
+                p[x] = p2[x % 256];
+            }
         }
-	    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float octavenoise3d(float x, float y, float z, int octaves, float persistence)
-	    {
-		    float total = 0;
-		    float frequency = 1;
-		    float amplitude = 1;
-		    float maxValue = 0;
-		    for (int i = 0; i < octaves; ++i)
-		    {
-			    total += noise3d(x * frequency, y * frequency, z * frequency) * amplitude;
-			    maxValue += amplitude;
-			    amplitude *= persistence;
-			    frequency += frequency;
-		    }
-		    return total / maxValue;
+        {
+            float total = 0;
+            float frequency = 1;
+            float amplitude = 1;
+            float maxValue = 0;
+            for (int i = 0; i < octaves; ++i)
+            {
+                total += noise3d(x * frequency, y * frequency, z * frequency) * amplitude;
+                maxValue += amplitude;
+                amplitude *= persistence;
+                frequency += frequency;
+            }
+            return total / maxValue;
         }
-	    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float noise3d(float xin, float yin, float zin)
         {
 
@@ -139,49 +139,49 @@ namespace Surface_Nets
             return 32.0f * (n0 + n1 + n2 + n3);
         }
 
-        
 
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    private static int fastfloor(float x)
-	    {
-		    int xx = (int)x;
-		    return x > 0 ? xx : xx - 1;
-	    }
-	    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    private static float dot(int[] g, float x, float y, float z)
-	    {
-		    return g[0] * x + g[1] * y + g[2] * z;
-	    }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    public static float grad(uint hash, float x, float y, float z)
-	    {
-		    uint h = hash & 15;                                  // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
-		    float u = h < 8 /* 0b1000 */ ? x : y;              // If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
-		    float v;                                           // In Ken Perlin's original implementation this was another conditional operator (?:).  I
-		    // expanded it for readability.
-		    if (h < 4 /* 0b0100 */)                             // If the first and second significant bits are 0 set v = y
-			    v = y;
-		    else if (h == 12 /* 0b1100 */ || h == 14 /* 0b1110*/)// If the first and second significant bits are 1 set v = x
-			    v = x;
-		    else                                                // If the first and second significant bits are not equal (0/1, 1/0) set v = z
-			    v = z;
-		    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v); // Use the last 2 bits to decide if u and v are positive or negative.  Then return their addition.
-	    }
-	    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    public static float fade(float t)
-	    {
-		    // Fade function as defined by Ken Perlin.  This eases coordinate values
-		    // so that they will "ease" towards integral values.  This ends up smoothing
-		    // the final output.
-		    return (t * t * t * (t * (t * 6 - 15) + 10));         // 6t^5 - 15t^4 + 10t^3
-	    }
-	    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    public static float lerp(float a, float b, float x)
-	    {
-		    return a + x * (b - a);
-	    }
+        private static int fastfloor(float x)
+        {
+            int xx = (int)x;
+            return x > 0 ? xx : xx - 1;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static float dot(int[] g, float x, float y, float z)
+        {
+            return g[0] * x + g[1] * y + g[2] * z;
+        }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float grad(uint hash, float x, float y, float z)
+        {
+            uint h = hash & 15;                                  // Take the hashed value and take the first 4 bits of it (15 == 0b1111)
+            float u = h < 8 /* 0b1000 */ ? x : y;              // If the most significant bit (MSB) of the hash is 0 then set u = x.  Otherwise y.
+            float v;                                           // In Ken Perlin's original implementation this was another conditional operator (?:).  I
+                                                               // expanded it for readability.
+            if (h < 4 /* 0b0100 */)                             // If the first and second significant bits are 0 set v = y
+                v = y;
+            else if (h == 12 /* 0b1100 */ || h == 14 /* 0b1110*/)// If the first and second significant bits are 1 set v = x
+                v = x;
+            else                                                // If the first and second significant bits are not equal (0/1, 1/0) set v = z
+                v = z;
+            return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v); // Use the last 2 bits to decide if u and v are positive or negative.  Then return their addition.
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float fade(float t)
+        {
+            // Fade function as defined by Ken Perlin.  This eases coordinate values
+            // so that they will "ease" towards integral values.  This ends up smoothing
+            // the final output.
+            return (t * t * t * (t * (t * 6 - 15) + 10));         // 6t^5 - 15t^4 + 10t^3
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float lerp(float a, float b, float x)
+        {
+            return a + x * (b - a);
+        }
     }
 }

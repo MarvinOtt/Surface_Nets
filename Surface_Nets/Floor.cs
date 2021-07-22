@@ -19,7 +19,7 @@ namespace Surface_Nets
         private VertexBuffer floorbuffer;
         private GraphicsDevice device;
         private Color[] floorcolors = new Color[2] { Color.Black, Color.White };
-        
+
         public Floor(GraphicsDevice device, int width, int height, int y, float scale)
         {
             this.device = device;
@@ -33,13 +33,13 @@ namespace Surface_Nets
         {
             List<VertexPositionColor> vertexlist = new List<VertexPositionColor>();
             int counter = 0;
-            for(int x = -floorwidth/2; x < floorwidth/2; x++)
+            for (int x = -floorwidth / 2; x < floorwidth / 2; x++)
             {
                 counter++;
-                for (int z = -floorwidth/2; z < floorheight/2; z++)
+                for (int z = -floorwidth / 2; z < floorheight / 2; z++)
                 {
                     counter++;
-                    foreach(VertexPositionColor vertex in Floortile(x, floory, z, floorcolors[counter%2]))
+                    foreach (VertexPositionColor vertex in Floortile(x, floory, z, floorcolors[counter % 2]))
                     {
                         vertexlist.Add(vertex);
                     }
@@ -69,7 +69,7 @@ namespace Surface_Nets
             effect.World = Matrix.Identity * Matrix.CreateTranslation(Game1.CHUNK_SIZE * new Vector3(Game1.currentccameraoffset.X, Game1.currentccameraoffset.Y, Game1.currentccameraoffset.Z));
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-                
+
                 pass.Apply();
                 device.SetVertexBuffer(floorbuffer);
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, floorbuffer.VertexCount / 3);

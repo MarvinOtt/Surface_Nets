@@ -273,11 +273,11 @@ namespace Surface_Nets
 
         }*/
 
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr Generate_Chunk(IntPtr vertexpos, IntPtr DATA, byte[,,] IsVertex, ref int returnlength);
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Generate_Vertexes(IntPtr vertexes, IntPtr states, short[,,] DATA, IntPtr vertexpos);
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void FreeChunkGenerationMemory(IntPtr states);
 
         public unsafe void Generate2(int threadindex, bool ForceUpload)

@@ -257,16 +257,16 @@ namespace Surface_Nets
             Chunk.size = Game1.CHUNK_SIZE;
         }
 
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetSimplexNoise(int seed);
 
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetParameters(float str);
 
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int Generate_DATA(short[,,] DATA, int x, int y, int z, int3 currentcampos);
 
-        [DllImport("SurfaceNet_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(Game1.DLL_PATH + "Surface_Nets_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ClearArrayofReferences(IntPtr p, int length);
 
         [MethodImpl(MethodImplOptions.NoOptimization)]

@@ -126,6 +126,8 @@ namespace Surface_Nets
 
         #endregion
 
+        public const string DLL_PATH = "..\\..\\..\\..\\x64\\Release\\";
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont font;
